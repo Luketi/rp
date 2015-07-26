@@ -50,11 +50,4 @@
    50  echo "# rp" >> README.md
    51  git init
    52  git add README.md
-   53  git commit -m "first commit"
-   54  git config --global user.email "you@example.com"
-   55  git config --global user.name "Pi"
-   56  git commit -m "first commit"
-   57  git remote add origin https://github.com/Luketi/rp.git
-   58  git push -u origin master
-   59  history
-   60  history >motionsetup.txt
+   
