@@ -1,0 +1,60 @@
+    1  ls
+    2  sudo apt-get update
+    3  sudo apt-get upgrade
+    4  ls
+    5  ifconfig
+    6  ls
+    7  sudo apt-get upgrade
+    8  sudo apt-get install motion
+    9  ffmpeg
+   10  avconv
+   11  ls
+   12  du
+   13  du /home/
+   14  du -ch /home/
+   15  du -mh /home
+   16  du -mh /
+   17  du -mh /usr/
+   18  sudo nano /etc/motion/motion.conf
+   19  ls
+   20  mkdir capture
+   21  ls /home/pi/capture/
+   22  sudo nano /etc/motion/motion.conf
+   23  sudo chown motion /home/pi/capture/
+   24  sudo nano /etc/default/motion
+   25  sudo service motion start
+   26  tail -n50 /var/log/syslog
+   27  sudo service motion stop
+   28  sudo nano /etc/motion/motion.conf
+   29  emacs
+   30  sudo service motion start
+   31  ls capture/
+   32  tail -n50 /var/log/syslog
+   33  sudo reboot
+   34  ls capture/
+   35  sudo nano /etc/motion/motion.conf
+   36  sudo service motion stop
+   37  sudo service motion start
+   38  ls capture/
+   39  ls -l capture/
+   40  ls -ls capture/
+   41  ls -lh capture/
+   42  ls capture/07_26_2015/
+   43  sudo service motion start
+   44  ls capture/07_26_2015/
+   45  sudo apt-get install git
+   46  ls
+   47  mkdir git
+   48  cd git/
+   49  git
+   50  echo "# rp" >> README.md
+   51  git init
+   52  git add README.md
+   53  git commit -m "first commit"
+   54  git config --global user.email "you@example.com"
+   55  git config --global user.name "Pi"
+   56  git commit -m "first commit"
+   57  git remote add origin https://github.com/Luketi/rp.git
+   58  git push -u origin master
+   59  history
+   60  history >motionsetup.txt
