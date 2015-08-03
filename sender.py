@@ -6,38 +6,46 @@ import urllib.request
 import logging
 import cgi
 import re
-import time
-import psutil
+import timeimport os 
 
-def get_cpu_temperature():
-    process = Popen(['vcgencmd', 'measure_temp'], stdout=PIPE)
-    output, _error = process.communicate()
-    return float(output[output.index('=') + 1:output.rindex("'")])
-    
-#cpu_temperature = get_cpu_temperature()
-cpu_usage = psutil.cpu_percent()
+# Return CPU temperature as a character string                                      
+def getCPUtemperature():
+    res = os.popen('vcgencmd measure_temp').readline()
+    return(res.replace("temp=","").replace("'C\n",""))
 
-ram = psutil.phymem_usage()
-ram_total = ram.total / 2**20       # MiB.
-ram_used = ram.used / 2**20
-ram_free = ram.free / 2**20
-ram_percent_used = ram.percent
+# Return RAM information (unit=kb) in a list                                        
+# Index 0: total RAM                                                                
+# Index 1: used RAM                                                                 
+# Index 2: free RAM                                                                 
+def getRAMinfo():
+    p = os.popen('free')
+    i = 0
+    while 1:
+        i = i + 1
+        line = p.readline()
+        if i==2:
+            return(line.split()[1:4])
 
-disk = psutil.disk_usage('/')
-disk_total = disk.total / 2**30     # GiB.
-disk_used = disk.used / 2**30
-disk_free = disk.free / 2**30
-disk_percent_used = disk.percent
-# 
-# Print top five processes in terms of virtual memory usage.
-# 
-#processes = sorted(
-#    ((p.get_memory_info().vms, p) for p in psutil.process_iter()),
-#    reverse=True
-#)
-#for virtual_memory, process in processes[:5]:
-#    print(virtual_memory // 2**20, process.pid, process.name)
+# Return % of CPU used by user as a character string                                
+def getCPUuse():
+    return(str(os.popen("top -n1 | awk '/Cpu\(s\):/ {print $2}'").readline().strip(\
+)))
 
+# Return information about disk space as a list (unit included)                     
+# Index 0: total disk space                                                         
+# Index 1: used disk space                                                          
+# Index 2: remaining disk space                                                     
+# Index 3: percentage of disk used                                                  
+def getDiskSpace():
+    p = os.popen("df -h /")
+    i = 0
+    while 1:
+        i = i +1
+        line = p.readline()
+        if i==2:
+            return(line.split()[1:5])
+            
+            
 url = 'http://botmeshed.appspot.com/update'
 data = urllib.parse.urlencode({'pid' : '0',
                          'bid' : '0',
