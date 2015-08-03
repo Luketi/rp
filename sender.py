@@ -6,7 +6,7 @@ import urllib.request
 import logging
 import cgi
 import re
-import timeimport os 
+import time 
 
 # Return CPU temperature as a character string                                      
 def getCPUtemperature():
@@ -44,14 +44,25 @@ def getDiskSpace():
         line = p.readline()
         if i==2:
             return(line.split()[1:5])
-            
-            
+
+tmp = getCPUtemperature()
+cpu = getCPUuse()
+mem = getRAMinfo()
+dsk = getDiskSpace()     
+     
+print(tmp)
+print(cpu)
+print(mem)
+print(dsk)
+           
+ 
 url = 'http://botmeshed.appspot.com/update'
 data = urllib.parse.urlencode({'pid' : '0',
                          'bid' : '0',
-                         'data0' : '0',
-                         'data1' : '0',
-                         'data2' : '0',
+                         'data0' : tmp,
+                         'data1' : cpu,
+                         'data2' : dsk[3],
+                         'data6' : mem[2]
                          })
 
 content = urllib.request.urlopen(url=url, data=data.encode('utf-8')).read()
