@@ -1,0 +1,21 @@
+sudo blkid
+  196  sudo fdisk –l
+  197  sudo mount /dev/sda1 /mnt
+  198  cd /mnt/
+  199  ls
+  200  mkdir youtube
+  201  sudo chmod 775 /mnt
+  202  mkdir youtube
+  203  ls -la
+  204  cd Test/
+  205  ls
+  206  touch test.txt
+  207  sudo mkdir youtube
+  208  cd ..
+  209  sudo mkdir youtube
+  210  cd youtube/
+  211  ls
+  212  youtube-dl -F https://www.youtube.com/watch?v=D_uSLgq0Kt0&list=PLpdQFf-hBsbpJlFf5owyxWHTHYP4AQBTV 
+  213  youtube-dl -F https://www.youtube.com/watch?v=TJ9ymUTam0k
+  214  youtube-dl -f 22 https://www.youtube.com/watch?v=TJ9ymUTam0k
+
