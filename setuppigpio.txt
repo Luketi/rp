@@ -3,3 +3,18 @@ unzip pigpio.zip
 cd PIGPIO
 make
 make install
+
+
+python3 /home/pi/gpio/sender.py
+  220  sudo pigpiod
+  221  python3 /home/pi/gpio/sender.py
+  222  python3 /home/pi/gpio/sender.08082015_2229.py 
+  223  crontabs -e
+  224  sudo crontab -e
+  225  crontab -e
+  226  ls
+  227  less gpio/sender.py 
+  228  sudo nano gpio/sender.py 
+  229  python3 gpio/sender.py 
+  230  sudo nano gpio/sender.py 
+  231  python3 gpio/sender.py 
