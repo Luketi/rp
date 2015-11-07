@@ -4,6 +4,8 @@ cd PIGPIO
 make
 make install
 
+#inside crontab
+*/45 * * * * python3 /home/pi/gpio/sender.py
 
 python3 /home/pi/gpio/sender.py
   220  sudo pigpiod
