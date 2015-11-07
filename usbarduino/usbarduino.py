@@ -54,11 +54,26 @@ while 1 :
 
     if app == 4 and len(parts) > 6:
         lv = int(parts[5]) + int(parts[6]) * 256
+        data = urllib.parse.urlencode({'pid' : app,
+                         'bid' : bid,
+                         'data0' : lv
+                         })
+                         
+    elif app == 5 and len(parts) > 8:
+        t = (int(parts[5]) + int(parts[6]) * 256) / 100
+        h = (int(parts[7]) + int(parts[8]) * 256) / 100
+        
+        data = urllib.parse.urlencode({'pid' : app,
+                         'bid' : bid,
+                         'data0' : t,
+                         'data1' : h,
+                         })
+    content = urllib.request.urlopen(url=url, data=data.encode('utf-8')).read()
+    print(content)
+    syslog.syslog('Arduino Event Sent to Server: ' + content.decode("utf-8") )
 
     c = c + 1
-    if c % 10 == 0:
-        syslog.syslog('ARDUINO: ' + l.decode("utf-8") )
-
+    
     if c % 1000 == 0:
         data = urllib.parse.urlencode({'pid' : '3',
                          'bid' : '3',
@@ -71,16 +86,4 @@ while 1 :
         print(content)
         syslog.syslog('Arduino Heartbeat Sent to Server: ' + content.decode("utf-8") )
 
-
-    if c % 100 == 0:
-        data = urllib.parse.urlencode({'pid' : '3',
-                         'bid' : '101',
-                         'data0' : 1,
-                         'data3' : 'arduino.remote.heartbeat',
-                         'data4' : l.decode("utf-8")  
-                         })
-
-        content = urllib.request.urlopen(url=url, data=data.encode('utf-8')).read()
-        print(content)
-        syslog.syslog('Arduino Heartbeat Sent to Server: ' + content.decode("utf-8") )
-
+    
