@@ -1,10 +1,16 @@
+#include <DHT.h>
+
 #include <VirtualWire.h>
+
+#define DHT22_PIN 6
 
 const int led_pin = 13;
 const int transmit_pin = 12;
 const int receive_pin = 11;
 const int transmit_en_pin = 3;
 const int photo_pin = A0;
+
+DHT dht(DHT22_PIN, DHT22);
 
 void setup()
 {
@@ -13,6 +19,7 @@ void setup()
     Serial.println("setup");
 
     pinMode(photo_pin, INPUT);
+    dht.begin();
 
     // Initialise the IO and ISR
     vw_set_tx_pin(transmit_pin);
@@ -23,9 +30,6 @@ void setup()
 
     vw_rx_start();       // Start the receiver PLL running
 }
-
-unsigned long photores_time = 0;
-int photores_v = 0;
 
 /// DATA PACKET
 /// bytes: [protocol version][board id][seq id][app id][recipient board id][value byte 0][value byte 1] ...
@@ -41,8 +45,18 @@ void serial_send(uint8_t* buf, uint8_t buflen)
   Serial.println();
 }
 
+unsigned long photores_time = 0;
+int photores_v = 0;
 unsigned long photolastsendtime = 0;
+
+
+unsigned long dht_time = 0;
+int dht_t = 0;
+int dht_h = 0;
+unsigned long dht_lastsendtime = 0;
+
 uint8_t seq = 0;
+
 
 void loop()
 {
@@ -51,9 +65,8 @@ void loop()
 
     if (vw_get_message(buf, &buflen)) // Non-blocking
     {
-        int i;
         digitalWrite(led_pin, HIGH); // Flash a light to show received good message  
-        // serial_send(buf, buflen);      
+        serial_send(buf, buflen);      
         digitalWrite(led_pin, LOW);
     }
     else
@@ -74,6 +87,25 @@ void loop()
                 serial_send(buf, buflen);  
                 photores_v = v;  
                 photolastsendtime = time;  
+            }
+        }
+
+
+        unsigned long tdiff = time - dht_time;
+        if (tdiff > 5000)
+        {
+            dht_time = time;
+            int t = dht.readTemperature(true) * 100;
+            int h = dht.readHumidity(true) * 100;
+            int tdiff = abs(dht_t - t);
+            unsigned long sdiff = time - dht_lastsendtime;
+            if (sdiff > 300000 || tdiff > 1)
+            {
+                buf[0] = 1;buf[1] = 131;buf[2]= seq++; buf[3]=5;buf[4]=0;buf[5]=t & 0xFF; buf[6]=t >> 8;buf[7]=h & 0xFF; buf[8]=h >> 8;
+                buflen = 9;
+                serial_send(buf, buflen);  
+                dht_t = t;  
+                dht_lastsendtime = time;  
             }
         }
     }
